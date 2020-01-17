@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {Button, Form, InputGroup, Modal, ModalBody, Row, Spinner} from 'react-bootstrap';
 import CostNode from './CostNode';
@@ -78,6 +78,10 @@ const stateNames = {
 
 const App = () => {
 
+    useEffect(() => {
+        const url = 'https://' + process.env.REACT_APP_SERVER_URL + '/';
+        fetch(url);
+    }, []);
     //Default State Values
     const [results, setResults] = useState({
         taxes: [
@@ -256,9 +260,8 @@ const App = () => {
     const averageRentTwoBed = results.average_rent.twoBeds;
 
     //Checks which switch is currently active and uses that value for Rent Cost
-    const rentCost = Number.parseFloat((switchAllBed ? averageRentAllBeds : (switchOneBed ? averageRentOneBed : (switchTwoBed ? averageRentTwoBed : (switchCustomRent ? customRent+'' : '0')))).replace(',', '').replace('$', '')) * 12;
+    const rentCost = Number.parseFloat((switchAllBed ? averageRentAllBeds : (switchOneBed ? averageRentOneBed : (switchTwoBed ? averageRentTwoBed : (switchCustomRent ? customRent + '' : '0')))).replace(',', '').replace('$', '')) * 12;
 
-    console.log(process.env.REACT_APP_SERVER_URL);
     return (
         <div className={'App'}>
             <div className={'titleDiv'}>
@@ -415,7 +418,8 @@ const App = () => {
                         <p className={'costType'}>Medicare Tax</p>
                         <p className={'costAmount'}>$ {results.taxes[3].taxValue}</p>
                     </div>
-                    <a style={{marginTop: '5px'}} href={'https://salaryaftertax.com/us'} target={'_blank'}><p> Read More </p></a>
+                    <a style={{marginTop: '5px'}} href={'https://salaryaftertax.com/us'} target={'_blank'}><p> Read
+                        More </p></a>
                 </div>
                 <div className={'infoBox'}>
                     <p className={'resultsSubtitle'}>
@@ -487,7 +491,8 @@ const App = () => {
                             }}
                         />
                     </div>
-                    <a style={{marginTop: '5px'}} href={'https://www.rentjungle.com/rentdata/'} target={'_blank'}><p> Read More </p></a>
+                    <a style={{marginTop: '5px'}} href={'https://www.rentjungle.com/rentdata/'} target={'_blank'}>
+                        <p> Read More </p></a>
                 </div>
                 <div className={'infoBox costOfLiving'}>
                     <p className={'resultsSubtitle'}>
@@ -539,7 +544,9 @@ const App = () => {
                     <p className={'modalText'} style={{width: '100%', marginRight: '0'}}>Disclaimer!</p>
                 </Modal.Header>
                 <ModalBody className={'modalStyle'}>
-                    <p className={'modalText'}>Please keep in mind that there are government websites available which provide up to date information and that changes in policies and tax laws might not have been considered</p>
+                    <p className={'modalText'}>Please keep in mind that there are government websites available which
+                        provide up to date information and that changes in policies and tax laws might not have been
+                        considered</p>
                 </ModalBody>
             </Modal>
         </div>
