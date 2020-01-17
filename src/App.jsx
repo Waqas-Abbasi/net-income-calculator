@@ -135,7 +135,7 @@ const App = () => {
     const [switchTwoBed, setSwitchTwoBed] = useState(false);
     const [switchCustomRent, setSwitchCustomRent] = useState(false);
     const [customRent, setCustomRent] = useState(0);
-    const [showTutorial, setShowTutorial] = useState(true);
+    const [showTutorial, setShowTutorial] = useState(false);
 
 
     useEffect(() => {
@@ -146,10 +146,12 @@ const App = () => {
             .then(() => {
                 setIsLoading(false);
                 setModalMessage('Fetching Data From API');
+                setShowTutorial(true);
             })
             .catch(e => {
                 setIsLoading(false);
                 setModalMessage('Error Fetching Data');
+                setShowTutorial(true);
             });
     }, []);
 
