@@ -231,6 +231,8 @@ const App = () => {
 
         if (e.target.value.match(pattern)) {
             setSalary(e.target.value);
+        }else if(e.target.value.length === 0){
+            setSalary('');
         }
 
     };
@@ -411,7 +413,7 @@ const App = () => {
                     </p>
                     <div className={'costInfo'}>
                         <p className={'costType'}>Federal Tax</p>
-                        <p className={'costAmount'}>$ {results.taxes[0].taxValue}</p>
+                        <p className={'costAmount'}>{results.taxes[0].taxValue}</p>
                     </div>
                     <div className={'costInfo'}>
                         <p className={'costType'}>State Tax</p>
@@ -526,7 +528,7 @@ const App = () => {
                     </p>
                     <div className={'costInfo'}>
                         <p className={'costType'}>Gross Income</p>
-                        <p className={'costAmount'}>{currencyFormat(salary)}</p>
+                        <p className={'costAmount'}>{salary.length > 0 ? currencyFormat(salary): '$0.00'}</p>
                     </div>
                     <div className={'costInfo'}>
                         <p className={'costType'}>Total Taxes</p>
