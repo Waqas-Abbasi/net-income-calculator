@@ -83,12 +83,6 @@ const stateNames = {
 
 const App = () => {
 
-    const process = {
-        env: {
-            REACT_APP_SERVER_URL: 'net-income-calculator-api.herokuapp.com'
-        }
-    };
-
     useEffect(() => {
         const url = 'https://' + process.env.REACT_APP_SERVER_URL + '/';
         fetch(url).catch(e => {
