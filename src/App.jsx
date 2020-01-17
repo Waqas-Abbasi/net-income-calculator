@@ -7,19 +7,24 @@ import CostNode from './CostNode';
 //Fetch Method for post Request
 async function postData(url = '', data = {}) {
     // Default options are marked with *
-    const response = await fetch(url, {
-        method: 'POST', // *GET, POST, PUT, DELETE, etc.
-        cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-        credentials: 'same-origin', // include, *same-origin, omit
-        headers: {
-            'Content-Type': 'application/json'
-            // 'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        redirect: 'follow', // manual, *follow, error
-        referrerPolicy: 'no-referrer', // no-referrer, *client
-        body: JSON.stringify(data) // body data type must match "Content-Type" header
-    });
-    return await response.json(); // parses JSON response into native JavaScript objects
+    try {
+        const response = await fetch(url, {
+            method: 'POST', // *GET, POST, PUT, DELETE, etc.
+            cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+            credentials: 'same-origin', // include, *same-origin, omit
+            headers: {
+                'Content-Type': 'application/json'
+                // 'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            redirect: 'follow', // manual, *follow, error
+            referrerPolicy: 'no-referrer', // no-referrer, *client
+            body: JSON.stringify(data) // body data type must match "Content-Type" header
+        });
+        return await response.json(); // parses JSON response into native JavaScript objects
+    }catch(e){
+
+    }
+
 }
 
 //Name of States with Abbreviations
@@ -80,7 +85,7 @@ const App = () => {
 
     useEffect(() => {
         const url = 'https://' + process.env.REACT_APP_SERVER_URL + '/';
-        fetch(url);
+        fetch(url).catch(e => {});
     }, []);
     //Default State Values
     const [results, setResults] = useState({
@@ -188,7 +193,8 @@ const App = () => {
 
             const result = new Promise((resolve) => {
                 postData(url, userOptions)
-                    .then((result) => resolve(result));
+                    .then((result) => resolve(result))
+                    .catch(e => {});
             });
 
             Promise.race([result, timeoutPromise]).then((value) => {
