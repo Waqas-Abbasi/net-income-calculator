@@ -21,7 +21,7 @@ async function postData(url = '', data = {}) {
             body: JSON.stringify(data) // body data type must match "Content-Type" header
         });
         return await response.json(); // parses JSON response into native JavaScript objects
-    }catch(e){
+    } catch (e) {
 
     }
 
@@ -83,9 +83,16 @@ const stateNames = {
 
 const App = () => {
 
+    const process = {
+        env: {
+            REACT_APP_SERVER_URL: 'net-income-calculator-api.herokuapp.com'
+        }
+    };
+
     useEffect(() => {
         const url = 'https://' + process.env.REACT_APP_SERVER_URL + '/';
-        fetch(url).catch(e => {});
+        fetch(url).catch(e => {
+        });
     }, []);
     //Default State Values
     const [results, setResults] = useState({
@@ -95,7 +102,7 @@ const App = () => {
                 taxValue: '4,342.00'
             }, {
                 taxType: 'State Tax',
-                taxValue: '2,321.26'
+                taxValue: '2,321.00'
             }, {
                 taxType: 'Social Security Tax',
                 taxValue: '3,100.00'
@@ -194,7 +201,8 @@ const App = () => {
             const result = new Promise((resolve) => {
                 postData(url, userOptions)
                     .then((result) => resolve(result))
-                    .catch(e => {});
+                    .catch(e => {
+                    });
             });
 
             Promise.race([result, timeoutPromise]).then((value) => {
@@ -236,7 +244,7 @@ const App = () => {
     //OnChange Handler for if any CostNode values changes
     const updateCostOfLivingAmount = (id, costType, amount) => {
         const totalCostIndex = totalCostsList.findIndex(x => x.costID === id);
-        totalCostsList[totalCostIndex].amount = parseFloat(amount.replace(',', ''));
+        totalCostsList[totalCostIndex].amount = parseInt(amount.replace(/,/g, ''));
         totalCostsList[totalCostIndex].costType = costType;
         setTotalCostsList([...totalCostsList]);
     };
@@ -248,14 +256,13 @@ const App = () => {
 
     //Formates number to a currency
     const currencyFormat = (num) => {
-        num = Number.parseFloat(num);
+        num = Number.parseInt(num);
         return '$' + num.toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, '' +
             '$1,');
     };
 
     //Calcualtes Total-Taxes from tax-results received by the API
-    const totalTaxes = results.taxes.map(item => parseFloat(item.taxValue.replace(',', ''))).reduce((a, b) => a + b);
-
+    const totalTaxes = results.taxes.map(item => Number.parseInt(item.taxValue.replace(/,/g, ''))).reduce((a, b) => a + b);
     //Calculates Total-Costs from "Additional Monthly Costs" sections
     const totalCosts = totalCostsList.length > 0 ? totalCostsList.map(item => item.amount).reduce((a, b) => a + b) * 12 : 0;
 
@@ -266,7 +273,7 @@ const App = () => {
     const averageRentTwoBed = results.average_rent.twoBeds;
 
     //Checks which switch is currently active and uses that value for Rent Cost
-    const rentCost = Number.parseFloat((switchAllBed ? averageRentAllBeds : (switchOneBed ? averageRentOneBed : (switchTwoBed ? averageRentTwoBed : (switchCustomRent ? customRent + '' : '0')))).replace(',', '').replace('$', '')) * 12;
+    const rentCost = Number.parseInt((switchAllBed ? averageRentAllBeds : (switchOneBed ? averageRentOneBed : (switchTwoBed ? averageRentTwoBed : (switchCustomRent ? customRent + '' : '0')))).replace(/,/g, '').replace('$', '')) * 12;
 
     return (
         <div className={'App'}>
