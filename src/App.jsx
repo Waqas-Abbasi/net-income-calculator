@@ -417,7 +417,7 @@ const App = () => {
                     </p>
                     <div className={'costInfo'}>
                         <p className={'costType'}>Federal Tax</p>
-                        <p className={'costAmount'}>{results.taxes[0].taxValue}</p>
+                        <p className={'costAmount'}>$ {results.taxes[0].taxValue}</p>
                     </div>
                     <div className={'costInfo'}>
                         <p className={'costType'}>State Tax</p>
