@@ -180,7 +180,7 @@ const App = () => {
                 setTimeout(resolve, 10000, false);
             });
 
-            const url = 'https://'+process.env.REACT_APP_SERVER_URL + '/getdata';
+            const url = 'https://' + process.env.REACT_APP_SERVER_URL + '/getdata';
 
             const result = new Promise((resolve) => {
                 postData(url, userOptions)
@@ -258,6 +258,8 @@ const App = () => {
     //Checks which switch is currently active and uses that value for Rent Cost
     const rentCost = Number.parseFloat((switchAllBed ? averageRentAllBeds : (switchOneBed ? averageRentOneBed : (switchTwoBed ? averageRentTwoBed : (switchCustomRent ? customRent+'' : '0')))).replace(',', '').replace('$', '')) * 12;
 
+    console.log(REACT_APP_SERVER_URL);
+    console.log(process.env.REACT_APP_SERVER_URL);
     return (
         <div className={'App'}>
             <div className={'titleDiv'}>
