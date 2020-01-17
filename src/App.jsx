@@ -181,7 +181,7 @@ const App = () => {
             });
 
             const result = new Promise((resolve) => {
-                postData('http://localhost:8080/getdata', userOptions)
+                postData(process.env.SERVER_URL + 'getdata', userOptions)
                     .then((result) => resolve(result));
             });
 
