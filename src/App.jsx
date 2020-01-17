@@ -180,8 +180,10 @@ const App = () => {
                 setTimeout(resolve, 10000, false);
             });
 
+            const url = 'https://'+process.env.SERVER_URL + '/getdata';
+
             const result = new Promise((resolve) => {
-                postData(process.env.SERVER_URL + 'getdata', userOptions)
+                postData(url, userOptions)
                     .then((result) => resolve(result));
             });
 
