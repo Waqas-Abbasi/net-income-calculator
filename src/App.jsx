@@ -83,11 +83,6 @@ const stateNames = {
 
 const App = () => {
 
-    useEffect(() => {
-        const url = 'https://' + process.env.REACT_APP_SERVER_URL + '/';
-        fetch(url).catch(e => {
-        });
-    }, []);
     //Default State Values
     const [results, setResults] = useState({
         taxes: [
@@ -142,6 +137,22 @@ const App = () => {
     const [customRent, setCustomRent] = useState(0);
     const [showTutorial, setShowTutorial] = useState(true);
 
+
+    useEffect(() => {
+        const url = 'https://' + process.env.REACT_APP_SERVER_URL + '/';
+        setModalMessage('Waking up the server..');
+        setIsLoading(true);
+        fetch(url)
+            .then(() => {
+                setIsLoading(false);
+                setModalMessage('Fetching Data From API');
+            })
+            .catch(e => {
+                setIsLoading(false);
+                setModalMessage('Error Fetching Data');
+            });
+    }, []);
+
     //Toogles/Untoggles other switches when one of the switch is toggled
     const toggleRentSwitch = (id) => {
         if (id === 0) {
@@ -168,7 +179,7 @@ const App = () => {
     };
 
     const numberFormat = (num) => {
-        return parseInt(num.replace(/,/g, ''))
+        return parseInt(num.replace(/,/g, ''));
     };
 
     const parseCityName = city => {
@@ -235,7 +246,7 @@ const App = () => {
 
         if (e.target.value.match(pattern) && numberFormat(e.target.value) < Number.MAX_SAFE_INTEGER) {
             setSalary(e.target.value);
-        }else if(e.target.value.length === 0){
+        } else if (e.target.value.length === 0) {
             setSalary('');
         }
 
@@ -532,7 +543,7 @@ const App = () => {
                     </p>
                     <div className={'costInfo'}>
                         <p className={'costType'}>Gross Income</p>
-                        <p className={'costAmount'}>{salary.length > 0 ? currencyFormat(numberFormat(salary)): '$0.00'}</p>
+                        <p className={'costAmount'}>{salary.length > 0 ? currencyFormat(numberFormat(salary)) : '$0.00'}</p>
                     </div>
                     <div className={'costInfo'}>
                         <p className={'costType'}>Total Taxes</p>
@@ -548,7 +559,7 @@ const App = () => {
                     </div>
                     <div className={'costInfo totalCost'}>
                         <p className={'costType totalType'}>Net Income</p>
-                        <p className={'costAmount totalAmount'}>{currencyFormat((salary.length > 0 ? numberFormat(salary): 0) - rentCost - totalCosts - totalTaxes)} </p>
+                        <p className={'costAmount totalAmount'}>{currencyFormat((salary.length > 0 ? numberFormat(salary) : 0) - rentCost - totalCosts - totalTaxes)} </p>
                     </div>
                 </div>
             </div>
