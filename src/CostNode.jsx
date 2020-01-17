@@ -11,6 +11,10 @@ const CostNode = (props) => {
     //Regex Pattern for Money Input
     const pattern = /^[0-9.,]+$/;
 
+    const numberFormat = (num) => {
+        return parseInt(num.replace(/,/g, ''))
+    };
+
     //Updates values when costType or costAmount are changed
     useEffect(() => {
         props.onChange(costID, costType, costAmount + '');
@@ -30,7 +34,7 @@ const CostNode = (props) => {
                     className={'costOfLivingInput'}
                     value={costAmount}
                     onChange={(e) => {
-                        if (e.target.value.match(pattern)) {
+                        if (e.target.value.match(pattern) && numberFormat(e.target.value) < Number.MAX_SAFE_INTEGER) {
                             setCostAmount(e.target.value);
                         } else if (e.target.value.length === 0) {
                             setCostAmount(0);

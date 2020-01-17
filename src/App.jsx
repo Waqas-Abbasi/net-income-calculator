@@ -167,6 +167,10 @@ const App = () => {
         }
     };
 
+    const numberFormat = (num) => {
+        return parseInt(num.replace(/,/g, ''))
+    };
+
     const parseCityName = city => {
         return city.split(',')[1].trim();
     };
@@ -229,7 +233,7 @@ const App = () => {
     const updateSalary = (e) => {
         const pattern = /^[0-9.,]+$/;
 
-        if (e.target.value.match(pattern)) {
+        if (e.target.value.match(pattern) && numberFormat(e.target.value) < Number.MAX_SAFE_INTEGER) {
             setSalary(e.target.value);
         }else if(e.target.value.length === 0){
             setSalary('');
@@ -240,7 +244,7 @@ const App = () => {
     //OnChange Handler for if any CostNode values changes
     const updateCostOfLivingAmount = (id, costType, amount) => {
         const totalCostIndex = totalCostsList.findIndex(x => x.costID === id);
-        totalCostsList[totalCostIndex].amount = parseInt(amount.replace(/,/g, ''));
+        totalCostsList[totalCostIndex].amount = numberFormat(amount);
         totalCostsList[totalCostIndex].costType = costType;
         setTotalCostsList([...totalCostsList]);
     };
@@ -258,7 +262,7 @@ const App = () => {
     };
 
     //Calcualtes Total-Taxes from tax-results received by the API
-    const totalTaxes = results.taxes.map(item => Number.parseInt(item.taxValue.replace(/,/g, ''))).reduce((a, b) => a + b);
+    const totalTaxes = results.taxes.map(item => numberFormat(item.taxValue)).reduce((a, b) => a + b);
     //Calculates Total-Costs from "Additional Monthly Costs" sections
     const totalCosts = totalCostsList.length > 0 ? totalCostsList.map(item => item.amount).reduce((a, b) => a + b) * 12 : 0;
 
@@ -492,7 +496,7 @@ const App = () => {
                             value={customRent}
                             onChange={(e) => {
                                 const pattern = /^[0-9.,]+$/;
-                                if (e.target.value.match(pattern)) {
+                                if (e.target.value.match(pattern) && numberFormat(e.target.value) < Number.MAX_SAFE_INTEGER) {
                                     setCustomRent(e.target.value);
                                 } else if (e.target.value.length === 0) {
                                     setCustomRent(0);
@@ -528,7 +532,7 @@ const App = () => {
                     </p>
                     <div className={'costInfo'}>
                         <p className={'costType'}>Gross Income</p>
-                        <p className={'costAmount'}>{salary.length > 0 ? currencyFormat(salary): '$0.00'}</p>
+                        <p className={'costAmount'}>{salary.length > 0 ? currencyFormat(numberFormat(salary)): '$0.00'}</p>
                     </div>
                     <div className={'costInfo'}>
                         <p className={'costType'}>Total Taxes</p>
@@ -544,7 +548,7 @@ const App = () => {
                     </div>
                     <div className={'costInfo totalCost'}>
                         <p className={'costType totalType'}>Net Income</p>
-                        <p className={'costAmount totalAmount'}>{currencyFormat(salary - rentCost - totalCosts - totalTaxes)} </p>
+                        <p className={'costAmount totalAmount'}>{currencyFormat((salary.length > 0 ? numberFormat(salary): 0) - rentCost - totalCosts - totalTaxes)} </p>
                     </div>
                 </div>
             </div>
